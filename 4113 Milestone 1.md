@@ -8,7 +8,7 @@
 | Module Tutor Name  | Jonathan Shore                                                   |
 | Student ID Number  | P512757                                                          |
 | Date of Submission | 03/05/26                                                         |
-| Word Count         |                                                                  |
+| Word Count         | 1385                                                             |
 
 - [x] *I confirm that this assignment is my own work. Where I have referred to academic sources, I have provided in-text citations and included the sources in
   the final reference list.*
@@ -136,8 +136,6 @@ Today, I continued working by focusing on the Gantt chart and reviewing my funct
 The problem I encountered today was finding a suitable Gantt chart template, as I found it quite difficult to choose the correct format. I also found it difficult to choise the correct format. I also found it a bit confusing to clearly separate functionality and constraints at first, but after reviewing my work , I started to understand it better.
 
 Overall, today's work was ligher compared to the first day, but still helped me make progress and improve my understanding of the assignment.
-
-
 
 ### 01/05/26 - Daily Entry 3  - IPO table and Gantt Chart
 
