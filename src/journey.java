@@ -1,15 +1,15 @@
 import java.math.BigDecimal;
 public class journey{
 
-    public int id;
-    public int fromZone;
-    public int toZone;
-    public int zonesCrossed;
-    public CityRideDataset.PassengerType passengerType;
-    public CityRideDataset.TimeBand timeBand;
-    public BigDecimal baseFare;
-    public BigDecimal discount;
-    public BigDecimal fareCharged;
+    private int id;
+    private int fromZone;
+    private int toZone;
+    private int zonesCrossed;
+    private CityRideDataset.PassengerType passengerType;
+    private CityRideDataset.TimeBand timeBand;
+    private BigDecimal baseFare;
+    private BigDecimal discount;
+    private BigDecimal fareCharged;
 
     public journey(int id, int fromZone, int toZone,
                    CityRideDataset.PassengerType passengerType,
@@ -25,6 +25,16 @@ public class journey{
         this.discount      = discount;
         this.fareCharged   = fareCharged;
     }
+    public int getId() { return id; }
+    public int getFromZone() { return fromZone; }
+    public int getToZone() { return toZone; }
+    public int getZonesCrossed() { return zonesCrossed; }
+    public CityRideDataset.PassengerType getPassengerType() { return passengerType; }
+    public CityRideDataset.TimeBand getTimeBand() { return timeBand; }
+    public BigDecimal getBaseFare() { return baseFare; }
+    public BigDecimal getDiscount() { return discount; }
+    public BigDecimal getFareCharged() { return fareCharged; }
+
 
     public String toString() {
         return "ID:" + id
@@ -33,8 +43,8 @@ public class journey{
                 + "  Zones:" + zonesCrossed
                 + "  Type:" + passengerType
                 + "  Band:" + timeBand
-                + "  Base:£" + baseFare
-                + "  Discount:£" + discount
-                + "  Charged:£" + fareCharged;
+                + "  Base:£" + baseFare.setScale(2)
+                + "  Discount:£" + discount.setScale(2)
+                + "  Charged:£" + fareCharged.setScale(2);
     }
 }
