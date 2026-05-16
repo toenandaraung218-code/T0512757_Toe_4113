@@ -1,5 +1,5 @@
 import java.math.BigDecimal;
-public class journey {
+public class journey{
 
     public int id;
     public int fromZone;

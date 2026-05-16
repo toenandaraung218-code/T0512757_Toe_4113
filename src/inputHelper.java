@@ -1,6 +1,6 @@
 import java.math.BigDecimal;
 import java.util.Scanner;
-public class inputhelper {
+public class inputHelper {
 
     public static int readInt(Scanner sc, String prompt, int min, int max) {
         while (true) {
