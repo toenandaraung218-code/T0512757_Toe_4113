@@ -1,5 +1,5 @@
 import java.math.BigDecimal;
-public class journey{
+public class Journey {
 
     private int id;
     private int fromZone;
@@ -11,7 +11,7 @@ public class journey{
     private BigDecimal discount;
     private BigDecimal fareCharged;
 
-    public journey(int id, int fromZone, int toZone,
+    public Journey(int id, int fromZone, int toZone,
                    CityRideDataset.PassengerType passengerType,
                    CityRideDataset.TimeBand timeBand,
                    BigDecimal baseFare, BigDecimal discount, BigDecimal fareCharged) {
