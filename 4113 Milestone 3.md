@@ -8,7 +8,7 @@ IY4113 Milestone 3
 | Module Tutor Name  | Jonathan Shore                                                   |
 | Student ID Number  | P512757                                                          |
 | Date of Submission | 17/05/2026                                                       |
-| Word Count         | 2229                                                             |
+| Word Count         | 2232                                                             |
 
 - [x] *I confirm that this assignment is my own work. Where I have referred to academic sources, I have provided in-text citations and included the sources in
   the final reference list.*
@@ -33,15 +33,7 @@ Screenshot of research:
 
 ![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2012.19.38.png)
 
-
-
 ![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2012.20.01.png)
-
-
-
-
-
-
 
 Title of research:How do I start coding a fare system in Java?
 
@@ -532,10 +524,6 @@ public class ReportManager {
 ### Updated Gantt Chart
 
 ![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2014.36.02.png)
-
-
-
-
 
 ## **Diary Entry 1 — 14/05/26**
 
