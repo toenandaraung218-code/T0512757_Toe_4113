@@ -7,8 +7,8 @@ IY4113 Milestone 3
 | Assessment Type    | Java fundamental's part 1                                        |
 | Module Tutor Name  | Jonathan Shore                                                   |
 | Student ID Number  | P512757                                                          |
-| Date of Submission |                                                                  |
-| Word Count         |                                                                  |
+| Date of Submission | 17/05/2026                                                       |
+| Word Count         | 2229                                                             |
 
 - [x] *I confirm that this assignment is my own work. Where I have referred to academic sources, I have provided in-text citations and included the sources in
   the final reference list.*
@@ -23,7 +23,7 @@ IY4113 Milestone 3
 
 Title of research: Java ArrayList and for-loop iteration
 
-Reference (link): Oracle.(n.d.).ArrayList(Java SE 17 & JDK 17).Retrieved from :(https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html)[Accessed 16 May 2026].
+Reference (link): Oracle.(n.d.).ArrayList(Java SE 17 & JDK 17).Retrieved from :(https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html)[Accessed 14 May 2026].
 
 How does the research help with coding practise?: It helped me clearly understand how to keep journey data stored in memory and work with it effectively by looping through the collection to filter results, count entries, and calculate totals—all without relying on a database.
 
@@ -31,13 +31,21 @@ Key coding ideas you could reuse in your program: ArrayList<Journey>, for (Journ
 
 Screenshot of research: 
 
+![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2012.19.38.png)
+
+
+
+![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2012.20.01.png)
+
+
+
 
 
 
 
 Title of research:How do I start coding a fare system in Java?
 
-Reference (link): Anthropic. (2024). Claude (Version Sonnet 4.6) [Large language model]. Retrieved from: https://www.claude.ai [Accessed 17 May 2026]
+Reference (link): Anthropic. (2024). Claude (Version Sonnet 4.6) [Large language model]. Retrieved from: https://www.claude.ai [Accessed 14 May 2026]
 
 How does the research help with coding practise?: Claude helped me understand how to structure my Java program based on my flowchart and explained how to implement the fare calculation, daily cap and discount logic step by step.
 
@@ -522,6 +530,12 @@ public class ReportManager {
     }
 
 ### Updated Gantt Chart
+
+![](/Users/toenandaraung/Desktop/Screenshot%202026-05-17%20at%2014.36.02.png)
+
+
+
+
 
 ## **Diary Entry 1 — 14/05/26**
 
