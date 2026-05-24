@@ -1,8 +1,17 @@
 import java.math.BigDecimal;
 import java.util.Scanner;
+//all my input stuff lives here so I don't repeat myself everywhere
 public class InputHelper {
 
-    public static int readInt(Scanner sc, String prompt, int min, int max) {
+    //keeping the scanner here means I don't have to pass it around everytime
+    private Scanner sc;
+
+    public InputHelper() {
+        this.sc = new Scanner (System.in);
+    }
+
+    //keep asking until the user actually types a number in range
+    public int readInt(String prompt, int min, int max) {
         while (true) {
             System.out.print(prompt);
             String input = sc.nextLine().trim();
@@ -13,13 +22,17 @@ public class InputHelper {
                 }
                 System.out.println("Please enter a number between " + min + " and " + max + ".");
             }
-            catch (Exception e) {
+            catch (NumberFormatException e) {
+
+                //they typed something weird, just ask again
                 System.out.println("Invalid input. Please enter a whole number.");
             }
         }
     }
 
-    public static int readIntOptional(Scanner sc, String prompt, int min, int max) {
+
+    //same thing but 0 or empty means they want to skip it
+    public int readIntOptional(String prompt, int min, int max) {
         while (true) {
             System.out.print(prompt);
             String input = sc.nextLine().trim();
@@ -37,7 +50,8 @@ public class InputHelper {
         }
     }
 
-    public static BigDecimal readDecimalOptional(Scanner sc, String prompt) {
+    //for things like prices - returns null if they skip
+    public BigDecimal readDecimalOptional(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = sc.nextLine().trim();
@@ -46,12 +60,15 @@ public class InputHelper {
                 return new BigDecimal(input);
             }
             catch (NumberFormatException e) {
+
+                //not a valid number , try again
                 System.out.println("Invalid amount. Example: 2.50");
             }
         }
     }
 
-    public static boolean readYesNo(Scanner sc, String prompt) {
+    //only accepts yes/no or y/n, nothing else
+    public boolean readYesNo( String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = sc.nextLine().trim();
@@ -59,5 +76,9 @@ public class InputHelper {
             if (input.equalsIgnoreCase("no")  || input.equalsIgnoreCase("n"))  return false;
             System.out.println("Please type yes or no.");
         }
+    }
+
+    public void close(){
+        sc.close();
     }
 }

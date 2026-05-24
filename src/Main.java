@@ -4,7 +4,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner        sc      = new Scanner(System.in);
+        //InputHelper now owns the scanner, no need for one here
+        InputHelper input     = new InputHelper();
         JourneyManager jm      = new JourneyManager();
         ReportManager  reports = new ReportManager(jm);
 
@@ -16,7 +17,6 @@ public class Main {
 
         while (running) {
 
-            // Display main menu
             System.out.println("\n==============================");
             System.out.println("         MAIN MENU            ");
             System.out.println("==============================");
@@ -30,23 +30,23 @@ public class Main {
             System.out.println("8. Exit");
             System.out.println("==============================");
 
-            // Get user choice - validate input
-            int choice = InputHelper.readInt(sc, "Enter option (1-8): ", 1, 8);
+            //using the input object instead of the old static call
+            int choice = input.readInt("Enter option (1-8): ", 1, 8);
 
-            // Execute selected option
-            if      (choice == 1) jm.addJourney(sc);
+            if      (choice == 1) jm.addJourney(input);
             else if (choice == 2) jm.listJourneys();
-            else if (choice == 3) reports.filterJourneys(sc);
+            else if (choice == 3) reports.filterJourneys(input);
             else if (choice == 4) reports.viewSummary();
             else if (choice == 5) reports.viewTotalsByPassengerType();
-            else if (choice == 6) jm.removeJourney(sc);
-            else if (choice == 7) jm.resetSystem(sc);
+            else if (choice == 6) jm.removeJourney(input);
+            else if (choice == 7) jm.resetSystem(input);
             else if (choice == 8) {
                 System.out.println("Goodbye!");
                 running = false;
             }
         }
+        input.close();
 
-        sc.close();
+
     }
 }

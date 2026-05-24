@@ -1,69 +1,89 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+//Manages everything to do with journeys - adding,listing , removing , resetting
 public class JourneyManager {
 
+    //all journeys get stored here as a list
     private ArrayList<Journey> Journeys = new ArrayList<>();
+
     public ArrayList<Journey> getJourneys() {
         return Journeys;
     }
 
+    //keeping a running total per passenger type so I can check the daily cap
     BigDecimal totalAdult   = new BigDecimal("0.00");
     BigDecimal totalStudent = new BigDecimal("0.00");
     BigDecimal totalChild   = new BigDecimal("0.00");
     BigDecimal totalSenior  = new BigDecimal("0.00");
 
+    //starts at 1 and goes up every time a journey is added, so each journey has a unique ID
     int nextId = 1;
 
-    public void addJourney(Scanner sc) {
+
+    public void addJourney(InputHelper input) {
         System.out.println("\n--- ADD JOURNEY ---");
 
-        int fromZone = InputHelper.readInt(sc, "Enter start zone (1-5): ", 1, 5);
-        int toZone   = InputHelper.readInt(sc, "Enter destination zone (1-5): ", 1, 5);
+        //it keeps asking until the user types something valid, so I don't have to validate myself
+        int fromZone = input.readInt("Enter start zone (1-5): ", 1, 5);
+        int toZone   = input.readInt( "Enter destination zone (1-5): ", 1, 5);
 
         System.out.println("Passenger type: 1=Adult  2=Student  3=Child  4=Senior Citizen");
-        int ptChoice = InputHelper.readInt(sc, "Choose (1-4): ", 1, 4);
+        //the user picks 1 to 4,noting else is valid
+        int ptChoice = input.readInt("Choose (1-4): ", 1, 4);
 
+        //turning the number they picket into the actual passenger type
         CityRideDataset.PassengerType passengerType;
-        if(ptChoice == 1) passengerType = CityRideDataset.PassengerType.ADULT;
+        if      (ptChoice == 1) passengerType = CityRideDataset.PassengerType.ADULT;
         else if (ptChoice == 2) passengerType = CityRideDataset.PassengerType.STUDENT;
         else if (ptChoice == 3) passengerType = CityRideDataset.PassengerType.CHILD;
-        else passengerType = CityRideDataset.PassengerType.SENIOR_CITIZEN;
+        else                    passengerType = CityRideDataset.PassengerType.SENIOR_CITIZEN;
+
 
         System.out.println("Time band: 1=Peak  2=Off-Peak");
-        int tbChoice = InputHelper.readInt(sc, "Choose (1-2): ", 1, 2);
+        //same idea - only 1 & 2 is valid here
+        int tbChoice = input.readInt("Choose (1-2): ", 1, 2);
 
+        //turning the number into the actual time band
         CityRideDataset.TimeBand timeBand;
         if (tbChoice == 1) timeBand = CityRideDataset.TimeBand.PEAK;
-        else timeBand = CityRideDataset.TimeBand.OFF_PEAK;
+        else               timeBand = CityRideDataset.TimeBand.OFF_PEAK;
 
+        // how many zones they're travelling through - used for display only
         int zonesCrossed = Math.abs(toZone - fromZone) + 1;
 
+        //pulling the base fare from the dataset based on zones and time band
         BigDecimal baseFare = CityRideDataset.getBaseFare(fromZone, toZone, timeBand);
         if (baseFare == null) {
+
+            //if there's no fare for that combination
             System.out.println("Error: No fare found. Journey not added.");
             return;
         }
 
+        //working out the discount and what's left after it
         BigDecimal discountRate   = CityRideDataset.DISCOUNT_RATE.get(passengerType);
         BigDecimal discountAmount = baseFare.multiply(discountRate).setScale(2, RoundingMode.HALF_UP);
         BigDecimal afterDiscount  = baseFare.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP);
 
+        //checking if adding this fare would go over the daily cap
         BigDecimal cap            = CityRideDataset.DAILY_CAP.get(passengerType);
         BigDecimal runningTotal   = getRunningTotal(passengerType);
         BigDecimal fareCharged;
 
         if (runningTotal.add(afterDiscount).compareTo(cap) > 0) {
+            //they've hit the cap so they only pay whatever is left up the cap
             fareCharged = cap.subtract(runningTotal).max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
             System.out.println("Daily cap of £" + cap + " reached! Fare adjusted to £" + fareCharged);
         } else {
             fareCharged = afterDiscount;
         }
 
+        //adding the fare to the running total for this passenger type
         updateRunningTotal(passengerType, fareCharged);
 
+        //building the journey object and saving it to the list
         Journey journey = new Journey(nextId, fromZone, toZone,
                 passengerType, timeBand, baseFare, discountAmount, fareCharged);
 
@@ -86,6 +106,8 @@ public class JourneyManager {
             System.out.println("No journeys recorded yet.");
             return;
         }
+
+        //just printing each journey using its to String method
         for (Journey j : Journeys) {
             System.out.println(j);
         }
@@ -94,15 +116,16 @@ public class JourneyManager {
 
 
 
-    public void removeJourney(Scanner sc) {
+    public void removeJourney(InputHelper input) {
         System.out.println("\n--- REMOVE JOURNEY ---");
         if (Journeys.isEmpty()) {
             System.out.println("No journeys to remove.");
             return;
         }
 
-        int id = InputHelper.readInt(sc, "Enter Journey ID to remove: ", 1, Integer.MAX_VALUE);
+        int id = input.readInt("Enter Journey ID to remove: ", 1, Integer.MAX_VALUE);
 
+        //searching the list to find the journey with that ID
         Journey found = null;
         for (Journey j : Journeys) {
             if (j.getId() == id) {
@@ -116,12 +139,14 @@ public class JourneyManager {
         }
 
         System.out.println("Found: " + found);
-        boolean confirm = InputHelper.readYesNo(sc, "Remove this journey? (yes/no): ");
+        //double checking before removing - don't want to delete the wrong one
+        boolean confirm = input.readYesNo( "Remove this journey? (yes/no): ");
         if (!confirm) {
             System.out.println("Removal cancelled.");
             return;
         }
 
+        //subtracting the fare from the running total before removing it
         updateRunningTotal(found.getPassengerType(), found.getFareCharged().negate());
         Journeys.remove(found);
         System.out.println("Journey " + id + " removed successfully.");
@@ -129,10 +154,11 @@ public class JourneyManager {
 
 
 
-    public void resetSystem(Scanner sc) {
+    public void resetSystem(InputHelper input) {
         System.out.println("\n--- RESET SYSTEM ---");
         System.out.println("WARNING: This will delete ALL journeys and reset all totals.");
-        boolean confirm = InputHelper.readYesNo(sc, "Are you sure? (yes/no): ");
+        //making sure they really mean it before wiping everything
+        boolean confirm = input.readYesNo("Are you sure? (yes/no): ");
         if (confirm) {
             Journeys.clear();
             totalAdult = new BigDecimal("0.00");
@@ -147,7 +173,7 @@ public class JourneyManager {
     }
 
 
-
+    //returns the current daily total for whichever passenger type is passed in
     public BigDecimal getRunningTotal(CityRideDataset.PassengerType pt) {
         return switch (pt) {
             case ADULT -> totalAdult;
