@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.util.Scanner;
+import java.time.LocalDate;
 //all my input stuff lives here so I don't repeat myself everywhere
 public class InputHelper {
 
@@ -9,6 +10,23 @@ public class InputHelper {
     public InputHelper() {
         this.sc = new Scanner (System.in);
     }
+
+    public LocalDate readDate( String prompt){
+        while (true){
+            System.out.println(prompt);
+            String input = sc.nextLine().trim();
+            if (input.isEmpty()){
+                return LocalDate.now();
+            }
+            try{
+                return LocalDate.parse(input);
+            }
+            catch(Exception e){
+                System.out.println("Invalid date format.Please use yyyy-MM-dd,e.g. 2026-06-23.");
+            }
+        }
+    }
+
 
     //keep asking until the user actually types a number in range
     public int readInt(String prompt, int min, int max) {

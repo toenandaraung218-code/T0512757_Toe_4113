@@ -1,15 +1,17 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 //Manages everything to do with journeys - adding,listing , removing , resetting
 public class JourneyManager {
 
     //all journeys get stored here as a list
-    private ArrayList<Journey> Journeys = new ArrayList<>();
+    private ArrayList<Journey> journeys = new ArrayList<>();
 
     public ArrayList<Journey> getJourneys() {
-        return Journeys;
+        return journeys;
     }
 
     //keeping a running total per passenger type so I can check the daily cap
@@ -21,9 +23,11 @@ public class JourneyManager {
     //starts at 1 and goes up every time a journey is added, so each journey has a unique ID
     int nextId = 1;
 
-
+    //Add journeys
     public void addJourney(InputHelper input) {
         System.out.println("\n--- ADD JOURNEY ---");
+
+        LocalDate date = input.readDate("Enter journey date(yyyy-MM-dd) or press enter for today: ");
 
         //it keeps asking until the user types something valid, so I don't have to validate myself
         int fromZone = input.readInt("Enter start zone (1-5): ", 1, 5);
@@ -76,7 +80,8 @@ public class JourneyManager {
             //they've hit the cap so they only pay whatever is left up the cap
             fareCharged = cap.subtract(runningTotal).max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
             System.out.println("Daily cap of £" + cap + " reached! Fare adjusted to £" + fareCharged);
-        } else {
+        }
+        else {
             fareCharged = afterDiscount;
         }
 
@@ -84,12 +89,13 @@ public class JourneyManager {
         updateRunningTotal(passengerType, fareCharged);
 
         //building the journey object and saving it to the list
-        Journey journey = new Journey(nextId, fromZone, toZone,
+        Journey journey = new Journey(nextId,date, fromZone, toZone,
                 passengerType, timeBand, baseFare, discountAmount, fareCharged);
 
-        Journeys.add(journey);
+        journeys.add(journey);
         nextId++;
         System.out.println("\nJourney added! ID: " + journey.getId());
+        System.out.println("Date        : " + date);
         System.out.println("Route       : Zone " + fromZone + " to Zone " + toZone + " (" + zonesCrossed + " zones)");
         System.out.println("Passenger   : " + passengerType);
         System.out.println("Time Band   : " + timeBand);
@@ -99,26 +105,87 @@ public class JourneyManager {
         System.out.println("Daily Total : £" + getRunningTotal(passengerType) + " / £" + cap);
     }
 
-
+    //List Journeys
     public void listJourneys() {
         System.out.println("\n--- ALL JOURNEYS ---");
-        if (Journeys.isEmpty()) {
+        if (journeys.isEmpty()) {
             System.out.println("No journeys recorded yet.");
             return;
         }
 
         //just printing each journey using its to String method
-        for (Journey j : Journeys) {
+        for (Journey j : journeys) {
             System.out.println(j);
         }
-        System.out.println("Total: " + Journeys.size() + " journey(s)");
+        System.out.println("Total: " + journeys.size() + " journey(s)");
+    }
+
+
+    // Find journeys
+    private Journey findJourneyByID(int id){
+        for(Journey j : journeys){
+            if(j.getId() == id){
+                return j;
+            }
+        }
+        return null;
+    }
+
+
+    //Edit Journeys
+    private void editJourney(InputHelper input){
+        System.out.println("\n-------Edit Journey-------");
+        if (journeys.isEmpty()){
+            System.out.println("No journeys to edit.");
+            return;
+        }
+
+        int id = input.readInt("Enter Journey ID to edit: ", 1, Integer.MAX_VALUE);
+        Journey found = findJourneyByID(id);
+
+        if (found == null){
+            System.out.println("Journey ID " +id + "not found");
+            return;
+        }
+        System.out.println("Current details: " + found);
+
+        updateRunningTotal(found.getPassengerType(), found.getFareCharged());
+
+        int fromZone = input.readInt("Enter new start zone (1-5): ",1,5);
+        int toZone = input.readInt("Enter new destination zone(1-5): ",1,5);
+
+        System.out.println("Passenger type: 1=Adult 2=Student 3=Child 4=Senior Citizen");
+        int ptChoice = input.readInt("Choose (1-4): ",1,4);
+        CityRideDataset.PassengerType passengerType;
+        if (ptChoice == 1) passengerType = CityRideDataset.PassengerType.ADULT;
+        else if (ptChoice == 2) passengerType = CityRideDataset.PassengerType.STUDENT;
+        else if (ptChoice == 3)  passengerType = CityRideDataset.PassengerType.CHILD;
+        else  passengerType = CityRideDataset.PassengerType.SENIOR_CITIZEN;
+
+        System.out.println("Time band: 1=Peak 2=Off-Peak");
+        int tbChoice = input.readInt("Choose (1-2): ",1,2);
+        CityRideDataset.TimeBand timeBand;
+        if (tbChoice == 1) timeBand = CityRideDataset.TimeBand.PEAK;
+        else timeBand = CityRideDataset.TimeBand.OFF_PEAK;
+
+        BigDecimal baseFare = CityRideDataset.getBaseFare(fromZone,toZone,timeBand);
+        if (baseFare == null){
+            System.out.println("Error: No fare found for that route. Edit cancelled.");
+            updateRunningTotal(found.getPassengerType(),found.getFareCharged());
+            return;
+        }
+
     }
 
 
 
+
+
+
+    //Remove journeys
     public void removeJourney(InputHelper input) {
         System.out.println("\n--- REMOVE JOURNEY ---");
-        if (Journeys.isEmpty()) {
+        if (journeys.isEmpty()) {
             System.out.println("No journeys to remove.");
             return;
         }
@@ -127,7 +194,7 @@ public class JourneyManager {
 
         //searching the list to find the journey with that ID
         Journey found = null;
-        for (Journey j : Journeys) {
+        for (Journey j : journeys) {
             if (j.getId() == id) {
                 found = j;
                 break;
@@ -148,19 +215,20 @@ public class JourneyManager {
 
         //subtracting the fare from the running total before removing it
         updateRunningTotal(found.getPassengerType(), found.getFareCharged().negate());
-        Journeys.remove(found);
+        journeys.remove(found);
         System.out.println("Journey " + id + " removed successfully.");
     }
 
 
 
+    //Reset
     public void resetSystem(InputHelper input) {
         System.out.println("\n--- RESET SYSTEM ---");
         System.out.println("WARNING: This will delete ALL journeys and reset all totals.");
         //making sure they really mean it before wiping everything
         boolean confirm = input.readYesNo("Are you sure? (yes/no): ");
         if (confirm) {
-            Journeys.clear();
+            journeys.clear();
             totalAdult = new BigDecimal("0.00");
             totalStudent = new BigDecimal("0.00");
             totalChild = new BigDecimal("0.00");

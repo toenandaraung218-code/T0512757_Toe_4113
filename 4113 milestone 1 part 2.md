@@ -8,8 +8,8 @@
 | Module Tutor Name  | Jonathan Shore                                                       |
 | Student ID Number  | P512757                                                              |
 | Date of Submission | 14/06/2026                                                           |
-| Word Count         |                                                                      |
-| GitHub Link        |                                                                      |
+| Word Count         | 1344                                                                 |
+| GitHub Link        | https://github.com/toenandaraung218-code/T0512757_Toe_4113           |
 
 - [x] *I confirm that this assignment is my own work. Where I have referred to academic sources, I have provided in-text citations and included the sources in
   the final reference list.*
@@ -213,8 +213,6 @@ Key Design ideas to reuse:
 
 ![](/Users/toenandaraung/Desktop/Screenshot%202026-06-14%20at%2013.44.56.png)
 
-
-
 Research 2 : Name of program: Citymapper 
 
 Reference (link):Citymapper.(n.d).Journey planner . Retrieved from:[https://citymapper.com](https://citymapper.com) [Accessed 13 June 2026]
@@ -255,15 +253,11 @@ Today I started part 2 specification by reading through it carefully. I compared
 
 The main challenge today was understanding the full of part 2 , as it is much more complex than part 1. However, breaking it down section by section made it more manageable.
 
-
-
 ###### Diary Entry 2 - 13 June 2026
 
 Today I focused on completeing the system constraints, IPO tables and starting fowcharts. I went through each Part 2 requirement carefully to make sure every bullet point in the core functionality matched a specific requirement. i then started drawing the flowcharts in miro , beginning with the rider menu and add jounrey flowcharts. 
 
 The hardest part was makeing sure i used the correct flowcharts symbols, especially after the feedback from part 1. I made sure to use parallelograms for inputs and outputs and predefined process shapes for sub- flowcharts.
-
-
 
 ###### Diary Entry 3 - 14 June 2026
 
