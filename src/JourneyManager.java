@@ -54,7 +54,7 @@ public class JourneyManager {
         if (tbChoice == 1) timeBand = CityRideDataset.TimeBand.PEAK;
         else               timeBand = CityRideDataset.TimeBand.OFF_PEAK;
 
-        // how many zones they're travelling through - used for display only
+        // how many zones they're traveling through - used for display only
         int zonesCrossed = Math.abs(toZone - fromZone) + 1;
 
         //pulling the base fare from the dataset based on zones and time band
@@ -106,7 +106,7 @@ public class JourneyManager {
     }
 
     //List Journeys
-    public void listJourneys() {
+    public void listJourney() {
         System.out.println("\n--- ALL JOURNEYS ---");
         if (journeys.isEmpty()) {
             System.out.println("No journeys recorded yet.");
@@ -133,7 +133,7 @@ public class JourneyManager {
 
 
     //Edit Journeys
-    private void editJourney(InputHelper input){
+    public void editJourney(InputHelper input){
         System.out.println("\n-------Edit Journey-------");
         if (journeys.isEmpty()){
             System.out.println("No journeys to edit.");
