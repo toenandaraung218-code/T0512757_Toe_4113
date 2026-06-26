@@ -175,12 +175,33 @@ public class JourneyManager {
             return;
         }
 
+        BigDecimal discountRate   = CityRideDataset.DISCOUNT_RATE.get(passengerType);
+        BigDecimal discountAmount = baseFare.multiply(discountRate).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal afterDiscount  = baseFare.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal cap          = CityRideDataset.DAILY_CAP.get(passengerType);
+        BigDecimal runningTotal = getRunningTotal(passengerType);
+        BigDecimal fareCharged;
+
+        if (runningTotal.add(afterDiscount).compareTo(cap) > 0) {
+            fareCharged = cap.subtract(runningTotal).max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
+        } else {
+            fareCharged = afterDiscount;
+        }
+
+        updateRunningTotal(passengerType, fareCharged);
+
+        found.setFromZone(fromZone);
+        found.setToZone(toZone);
+        found.setPassengerType(passengerType);
+        found.setTimeBand(timeBand);
+        found.setBaseFare(baseFare);
+        found.setDiscount(discountAmount);
+        found.setFareCharged(fareCharged);
+
+        System.out.println("Journey " + id + " updated successfully.");
+        System.out.println("New details: " + found);
     }
-
-
-
-
-
 
     //Remove journeys
     public void removeJourney(InputHelper input) {
