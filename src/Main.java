@@ -15,6 +15,9 @@ public class Main {
 
         RiderProfile profile = RiderProfile.createNewProfile(input);
 
+        SettingsManager settings = new SettingsManager();
+        settings.displaySettings();
+
         boolean running = true;
 
         while (running) {
