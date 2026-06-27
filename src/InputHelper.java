@@ -27,6 +27,17 @@ public class InputHelper {
         }
     }
 
+    public String readText(String prompt){
+        while(true){
+            System.out.print(prompt);
+            String input =sc.nextLine().trim();
+            if(!input.isEmpty()){
+                return input;
+            }
+            System.out.println("This field cannot be empty.Please try again.");
+        }
+    }
+
 
     //keep asking until the user actually types a number in range
     public int readInt(String prompt, int min, int max) {

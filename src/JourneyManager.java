@@ -24,7 +24,7 @@ public class JourneyManager {
     int nextId = 1;
 
     //Add journeys
-    public void addJourney(InputHelper input) {
+    public void addJourneys(InputHelper input) {
         System.out.println("\n--- ADD JOURNEY ---");
 
         LocalDate date = input.readDate("Enter journey date(yyyy-MM-dd) or press enter for today: ");
@@ -105,8 +105,11 @@ public class JourneyManager {
         System.out.println("Daily Total : £" + getRunningTotal(passengerType) + " / £" + cap);
     }
 
+
+
+
     //List Journeys
-    public void listJourney() {
+    public void listJourneys() {
         System.out.println("\n--- ALL JOURNEYS ---");
         if (journeys.isEmpty()) {
             System.out.println("No journeys recorded yet.");
@@ -121,19 +124,9 @@ public class JourneyManager {
     }
 
 
-    // Find journeys
-    private Journey findJourneyByID(int id){
-        for(Journey j : journeys){
-            if(j.getId() == id){
-                return j;
-            }
-        }
-        return null;
-    }
-
 
     //Edit Journeys
-    public void editJourney(InputHelper input){
+    public void editJourneys(InputHelper input){
         System.out.println("\n-------Edit Journey-------");
         if (journeys.isEmpty()){
             System.out.println("No journeys to edit.");
@@ -149,7 +142,7 @@ public class JourneyManager {
         }
         System.out.println("Current details: " + found);
 
-        updateRunningTotal(found.getPassengerType(), found.getFareCharged());
+        updateRunningTotal(found.getPassengerType(), found.getFareCharged().negate());
 
         int fromZone = input.readInt("Enter new start zone (1-5): ",1,5);
         int toZone = input.readInt("Enter new destination zone(1-5): ",1,5);
@@ -203,8 +196,53 @@ public class JourneyManager {
         System.out.println("New details: " + found);
     }
 
+
+
+    // Find journeys
+    private Journey findJourneyByID(int id){
+        for(Journey j : journeys){
+            if(j.getId() == id){
+                return j;
+            }
+        }
+        return null;
+    }
+
+    //Filter journeys by date and/or time band
+    public void filterJourneysByDateAndTimeBand(InputHelper input) {
+        System.out.println("\n--- FILTER JOURNEYS ---");
+        if (journeys.isEmpty()) {
+            System.out.println("No journeys recorded yet.");
+            return;
+        }
+
+        LocalDate filterDate = input.readDate("Enter date to filter by (yyyy-MM-dd), or press enter to skip: ");
+
+        System.out.println("Time band: 1=Peak  2=Off-Peak  0=Skip (show all)");
+        int tbChoice = input.readInt("Choose (0-2): ", 0, 2);
+        CityRideDataset.TimeBand filterBand = null;
+        if (tbChoice == 1) filterBand = CityRideDataset.TimeBand.PEAK;
+        if (tbChoice == 2) filterBand = CityRideDataset.TimeBand.OFF_PEAK;
+
+        boolean any = false;
+        for (Journey j : journeys) {
+            boolean dateMatches = (filterDate == null) || j.getDate().equals(filterDate);
+            boolean bandMatches = (filterBand == null) || j.getTimeBand() == filterBand;
+            if (dateMatches && bandMatches) {
+                System.out.println(j);
+                any = true;
+            }
+        }
+        if (!any) {
+            System.out.println("No journeys matched that filter.");
+        }
+    }
+
+
+
+
     //Remove journeys
-    public void removeJourney(InputHelper input) {
+    public void removeJourneys(InputHelper input) {
         System.out.println("\n--- REMOVE JOURNEY ---");
         if (journeys.isEmpty()) {
             System.out.println("No journeys to remove.");
