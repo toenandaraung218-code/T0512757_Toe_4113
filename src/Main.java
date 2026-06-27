@@ -13,13 +13,19 @@ public class Main {
         System.out.println("   CITY RIDE FARE SYSTEM      ");
         System.out.println("==============================");
 
-        RiderProfile profile = RiderProfile.createNewProfile(input);
+        RiderProfile profile = JsonHandler.loadProfile();
+        if (profile == null) {
+            profile = RiderProfile.createNewProfile(input);
+        } else {
+            System.out.println("Welcome back, " + profile.getName() + "!");
+        }
+
 
         SettingsManager settings = new SettingsManager();
         settings.displaySettings();
 
-        boolean running = true;
 
+        boolean running = true;
         while (running) {
 
             System.out.println("\n==============================");
@@ -53,11 +59,15 @@ public class Main {
             else if (choice == 9) jm.resetSystem(input);
             else if (choice == 10)System.out.println("\n" + profile);
             else if (choice == 11) {
-                System.out.println("Goodbye, " + profile.getName() + "!");;
+                boolean saveBeforeExit = input.readYesNo("Save your profile before exiting? (yes/no): ");
+                if (saveBeforeExit) {
+                    JsonHandler.saveProfile(profile);
+                }
+                System.out.println("Goodbye, " + profile.getName() + "!");
                 running = false;
             }
+
         }
-        input.close();
 
 
     }
